@@ -21,6 +21,7 @@ val scalafixV = "0.11.1"
 
 ThisBuild / crossScalaVersions := Seq(Scala213, "2.12.18")
 ThisBuild / scalaVersion := Scala213 // the default Scala
+ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11"))
 
 // semantic db settings
 ThisBuild / semanticdbEnabled := true
@@ -32,7 +33,17 @@ lazy val root = project
   .aggregate(scalafixRules, scalafixTests)
   .enablePlugins(NoPublishPlugin)
 
-lazy val docs = project.in(file("site")).enablePlugins(TypelevelSitePlugin)
+lazy val docs = project
+  .in(file("site"))
+  .enablePlugins(TypelevelSitePlugin)
+  .settings(tlSiteHelium ~= {
+    import laika.helium.config._
+    import laika.ast.Path.Root
+    _.site
+      .topNavigationBar(
+        homeLink = IconLink.internal(Root / "index.md", HeliumIcon.home)
+      )
+  })
 
 lazy val scalafixRules = project
   .in(file("rules"))
