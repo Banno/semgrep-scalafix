@@ -21,6 +21,7 @@ val scalafixV = "0.11.1"
 
 ThisBuild / crossScalaVersions := Seq(Scala213, "2.12.18")
 ThisBuild / scalaVersion := Scala213 // the default Scala
+ThisBuild / githubWorkflowJavaVersions := Seq(JavaSpec.temurin("11"))
 
 // semantic db settings
 ThisBuild / semanticdbEnabled := true
