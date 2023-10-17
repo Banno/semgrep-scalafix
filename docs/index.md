@@ -3,8 +3,7 @@
 The goal of semgrep-scalafix is to provide scalafix rules for checks that exist as [semgrep rules](https://semgrep.dev/p/scala).
 
 ### Usage
-
-This library is currently available for Scala binary versions 2.13 and 3.1.
+These scalafix rules are cross-published for Scala versions 2.12 and 2.13.
 
 To use the latest version, include the following in your `build.sbt`:
 
