@@ -30,7 +30,6 @@ jobs:
         os: [ubuntu-latest]
         scala: [2.13, 2.12]
         java: [temurin@8]
-        project: [rootJVM]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     steps:
@@ -57,22 +56,22 @@ jobs:
 
       - name: Check headers and formatting
         if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' headerCheckAll scalafmtCheckAll 'project /' scalafmtSbtCheck
+        run: sbt '++ ${{ matrix.scala }}' headerCheckAll scalafmtCheckAll 'project /' scalafmtSbtCheck
 
       - name: Check scalafix lints
         if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' 'scalafixAll --check'
+        run: sbt '++ ${{ matrix.scala }}' 'scalafixAll --check'
 
       - name: Test
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' test
+        run: sbt '++ ${{ matrix.scala }}' test
 
       - name: Check binary compatibility
         if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' mimaReportBinaryIssues
+        run: sbt '++ ${{ matrix.scala }}' mimaReportBinaryIssues
 
       - name: Generate API documentation
         if: matrix.java == 'temurin@8' && matrix.os == 'ubuntu-latest'
-        run: sbt 'project ${{ matrix.project }}' '++ ${{ matrix.scala }}' doc
+        run: sbt '++ ${{ matrix.scala }}' doc
 
       - name: Make target directories
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
@@ -86,7 +85,7 @@ jobs:
         if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main')
         uses: actions/upload-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}-${{ matrix.project }}
+          name: target-${{ matrix.os }}-${{ matrix.java }}-${{ matrix.scala }}
           path: targets.tar
 
   publish:
@@ -117,22 +116,22 @@ jobs:
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
         run: sbt +update
 
-      - name: Download target directories (2.13, rootJVM)
+      - name: Download target directories (2.13)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13
 
-      - name: Inflate target directories (2.13, rootJVM)
+      - name: Inflate target directories (2.13)
         run: |
           tar xf targets.tar
           rm targets.tar
 
-      - name: Download target directories (2.12, rootJVM)
+      - name: Download target directories (2.12)
         uses: actions/download-artifact@v3
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12-rootJVM
+          name: target-${{ matrix.os }}-${{ matrix.java }}-2.12
 
-      - name: Inflate target directories (2.12, rootJVM)
+      - name: Inflate target directories (2.12)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -191,7 +190,7 @@ jobs:
       - name: Submit Dependencies
         uses: scalacenter/sbt-dependency-submission@v2
         with:
-          modules-ignore: rootjs_2.13 rootjs_2.12 docs_2.13 docs_2.12 scalafixoutput_2.13 scalafixoutput_2.12 scalafixtests_2.13 scalafixtests_2.12 rootjvm_2.13 rootjvm_2.12 scalafixinput_2.13 scalafixinput_2.12 rootnative_2.13 rootnative_2.12
+          modules-ignore: root_2.13 root_2.12 docs_2.13 docs_2.12 scalafixoutput_2.13 scalafixoutput_2.12 scalafixtests_2.13 scalafixtests_2.12 scalafixinput_2.13 scalafixinput_2.12
           configs-ignore: test scala-tool scala-doc-tool test-internal
 
   site:

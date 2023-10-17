@@ -17,22 +17,58 @@ ThisBuild / tlSonatypeUseLegacyHost := false
 ThisBuild / tlSitePublishBranch := Some("main")
 
 val Scala213 = "2.13.12"
+val scalafixV = "0.11.1"
+
 ThisBuild / crossScalaVersions := Seq(Scala213, "2.12.18")
 ThisBuild / scalaVersion := Scala213 // the default Scala
 
-lazy val root = tlCrossRootProject.aggregate(core)
+// semantic db settings
+ThisBuild / semanticdbEnabled := true
+ThisBuild / semanticdbIncludeInJar := true
+ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 
-lazy val core = crossProject(JVMPlatform, JSPlatform)
-  .crossType(CrossType.Pure)
-  .in(file("core"))
+lazy val root = project
+  .in(file("."))
+  .aggregate(scalafixRules, scalafixTests)
+  .enablePlugins(NoPublishPlugin)
+
+lazy val docs = project.in(file("site")).enablePlugins(TypelevelSitePlugin)
+
+lazy val scalafixRules = project
+  .in(file("rules"))
+  .disablePlugins(ScalafixPlugin)
   .settings(
     name := "semgrep-scalafix",
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core" % "2.9.0",
-      "org.typelevel" %%% "cats-effect" % "3.5.1",
-      "org.scalameta" %%% "munit" % "0.7.29" % Test,
-      "org.typelevel" %%% "munit-cats-effect-3" % "1.0.7" % Test
+      "ch.epfl.scala" %% "scalafix-core" % scalafixV
     )
   )
 
-lazy val docs = project.in(file("site")).enablePlugins(TypelevelSitePlugin)
+lazy val scalafixInput = project
+  .in(file("input"))
+  .enablePlugins(NoPublishPlugin)
+  .disablePlugins(ScalafixPlugin)
+  .settings(
+    semanticdbOptions ++= Seq("-P:semanticdb:synthetics:on")
+  )
+
+lazy val scalafixOutput = project
+  .in(file("output"))
+  .enablePlugins(NoPublishPlugin)
+  .disablePlugins(ScalafixPlugin)
+
+lazy val scalafixTests = project
+  .in(file("tests"))
+  .disablePlugins(ScalafixPlugin)
+  .enablePlugins(NoPublishPlugin)
+  .enablePlugins(ScalafixTestkitPlugin)
+  .settings(
+    libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % scalafixV % Test cross CrossVersion.full,
+    scalafixTestkitOutputSourceDirectories :=
+      (scalafixOutput / Compile / unmanagedSourceDirectories).value,
+    scalafixTestkitInputSourceDirectories :=
+      (scalafixInput / Compile / unmanagedSourceDirectories).value,
+    scalafixTestkitInputClasspath :=
+      (scalafixInput / Compile / fullClasspath).value
+  )
+  .dependsOn(scalafixRules)
