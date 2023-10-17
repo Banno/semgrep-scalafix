@@ -23,12 +23,11 @@ class NoRsaWithoutPadding extends SemanticRule("NoRsaWithoutPadding") {
   val cipherMatch = SymbolMatcher.exact("javax/crypto/Cipher#getInstance().")
   val noPaddingR = ".*RSA/.*/NoPadding.*".r
   override def fix(implicit doc: SemanticDocument): Patch = {
-    doc.tree.collect {
-      case cipherMatch(Term.Apply.After_4_6_0(_, args)) =>
-        args.collect {
-          case t: Lit.String if noPaddingR.findFirstIn(t.value).nonEmpty =>
-            Patch.lint(NoRsaWithoutPaddingDiagnostic(t))
-        }.asPatch
+    doc.tree.collect { case cipherMatch(Term.Apply.After_4_6_0(_, args)) =>
+      args.collect {
+        case t: Lit.String if noPaddingR.findFirstIn(t.value).nonEmpty =>
+          Patch.lint(NoRsaWithoutPaddingDiagnostic(t))
+      }.asPatch
     }.asPatch
   }
 }
