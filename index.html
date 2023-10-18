@@ -82,6 +82,8 @@
 
   <ul class="nav-list">
     <li class="level1 nav-leaf"><a href="#usage">Usage</a></li>
+    <li class="level1 nav-node"><a href="#available-rules">Available Rules</a></li>
+    <li class="level2 nav-leaf"><a href="#norsawithoutpadding">NoRsaWithoutPadding</a></li>
   </ul>
 
   <p class="footer"></p>
@@ -91,13 +93,30 @@
       <main class="content">
 
         <h1 id="semgrep-scalafix" class="title">semgrep-scalafix</h1>
+        <p>The goal of semgrep-scalafix is to provide scalafix rules for checks that exist as <a href="https://semgrep.dev/p/scala">semgrep rules</a>.</p>
         
         <h3 id="usage" class="section"><a class="anchor-link left" href="#usage"><i class="icofont-laika link">&#xef71;</i></a>Usage</h3>
-        <p>This library is currently available for Scala binary versions 2.13 and 3.1.</p>
+        <p>These scalafix rules are cross-published for Scala versions 2.12 and 2.13.</p>
         <p>To use the latest version, include the following in your <code>build.sbt</code>:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> ++= </span><span class="type-name">Seq</span><span>(
-  </span><span class="string-literal">&quot;com.banno&quot;</span><span> %% </span><span class="string-literal">&quot;semgrep-scalafix&quot;</span><span> % </span><span class="string-literal">&quot;0.0-b3fd97e-SNAPSHOT&quot;</span><span>
-)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="type-name">ThisBuild</span><span> / </span><span class="identifier">scalafixDependencies</span><span> += 
+  </span><span class="string-literal">&quot;com.banno&quot;</span><span> %% </span><span class="string-literal">&quot;semgrep-scalafix&quot;</span><span> % </span><span class="string-literal">&quot;0.0-0a1f48f-SNAPSHOT&quot;</span></code></pre>
+        <p>Once enabled, configure which rules scalafix will run by adding them to your <code>.scalafix.conf</code> file like so:</p>
+        <pre><code>//.scalafix.conf
+rules = [
+  NoRsaWithoutPadding
+]</code></pre>
+        
+        <h3 id="available-rules" class="section"><a class="anchor-link left" href="#available-rules"><i class="icofont-laika link">&#xef71;</i></a>Available Rules</h3>
+        
+        <h4 id="norsawithoutpadding" class="section"><a class="anchor-link left" href="#norsawithoutpadding"><i class="icofont-laika link">&#xef71;</i></a>NoRsaWithoutPadding</h4>
+        <p>Relevant semgrep rule: <a href="https://semgrep.dev/r?q=scala.lang.security.audit.rsa-padding-set.rsa-padding-set">scala.lang.security.audit.rsa-padding-set.rsa-padding-set</a>.</p>
+        <p>This scalafix rule will raise an error if a <code>javax.crypto.Cipher</code> is instantiated using RSA, any mode, with no padding. For example:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">javax</span><span>.</span><span class="identifier">crypto</span><span>.</span><span class="type-name">Cipher</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">badCipher</span><span> = </span><span class="type-name">Cipher</span><span>.</span><span class="identifier">getInstance</span><span>(</span><span class="string-literal">&quot;RSA/None/NoPadding&quot;</span><span>) </span><span class="comment">// will raise scalafix error
+</span><span class="keyword">val</span><span> </span><span class="identifier">alsoBad</span><span>   = </span><span class="type-name">Cipher</span><span>.</span><span class="identifier">getInstance</span><span>(</span><span class="string-literal">&quot;RSA/ECB/NoPadding&quot;</span><span>) </span><span class="comment">// will raise scalafix error
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">goodCipher</span><span> = </span><span class="type-name">Cipher</span><span>.</span><span class="identifier">getInstance</span><span>(</span><span class="string-literal">&quot;RSA/ECB/PKCS1Padding&quot;</span><span>) </span></code></pre>
 
         
 <hr class="footer-rule"/>
