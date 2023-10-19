@@ -8,5 +8,5 @@ To use the latest version, include the following in your `build.sbt`:
 
 ```scala
 ThisBuild / scalafixDependencies += 
-  "com.banno" %% "semgrep-scalafix" % "0.0.1"
+  "com.banno" %% "semgrep-scalafix" % "0.1.0"
 ```
