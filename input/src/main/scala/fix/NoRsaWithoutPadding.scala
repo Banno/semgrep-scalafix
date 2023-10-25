@@ -5,6 +5,7 @@ package fix
 
 import javax.crypto.Cipher
 
+//
 object NoRsaWithoutPadding {
   Cipher.getInstance("RSA/None/NoPadding") /* assert: NoRsaWithoutPadding.noRsaWithoutPadding
                      ^^^^^^^^^^^^^^^^^^^^
