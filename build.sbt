@@ -15,7 +15,7 @@ ThisBuild / tlSonatypeUseLegacyHost := true // publish to oss.sonatype.org
 // publish website from this branch
 ThisBuild / tlSitePublishBranch := Some("main")
 
-val Scala213 = "2.13.12"
+val Scala213 = "2.13.13"
 val scalafixV = "0.11.1"
 
 ThisBuild / crossScalaVersions := Seq(Scala213, "2.12.18")
