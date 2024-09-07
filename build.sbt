@@ -18,7 +18,7 @@ ThisBuild / tlSitePublishBranch := Some("main")
 val Scala213 = "2.13.14"
 val scalafixV = "0.12.1"
 
-ThisBuild / crossScalaVersions := Seq(Scala213, "2.12.19")
+ThisBuild / crossScalaVersions := Seq(Scala213, "2.12.20")
 ThisBuild / scalaVersion := Scala213 // the default Scala
 ThisBuild / tlJdkRelease := Some(8) // the JVM to target
 ThisBuild / githubWorkflowJavaVersions := Seq(
