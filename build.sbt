@@ -1,5 +1,3 @@
-import xerial.sbt.Sonatype.sonatypeCentralHost
-
 // https://typelevel.org/sbt-typelevel/faq.html#what-is-a-base-version-anyway
 ThisBuild / tlBaseVersion := "0.4" // your current series x.y
 
@@ -11,8 +9,6 @@ ThisBuild / developers := List(
   // your GitHub handle and name
   tlGitHubDev("samspills", "Sam Pillsworth")
 )
-
-ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
 
 // publish website from this branch
 ThisBuild / tlSitePublishBranch := Some("main")
