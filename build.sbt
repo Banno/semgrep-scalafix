@@ -13,7 +13,7 @@ ThisBuild / developers := List(
 // publish website from this branch
 ThisBuild / tlSitePublishBranch := Some("main")
 
-val Scala213 = "2.13.17"
+val Scala213 = "2.13.18"
 val scalafixV = "0.14.4"
 
 ThisBuild / crossScalaVersions := Seq(Scala213, "2.12.20")
