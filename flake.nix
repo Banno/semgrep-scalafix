@@ -5,12 +5,19 @@
     flake-utils.follows = "typelevel-nix/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, typelevel-nix }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      typelevel-nix,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = import nixpkgs {
           inherit system;
-          overlays = [ typelevel-nix.overlay ];
+          overlays = [ typelevel-nix.overlays.default ];
         };
       in
       {
@@ -19,7 +26,7 @@
           name = "semgrep-scalafix-shell";
           typelevelShell = {
             jdk.package = pkgs.jdk11;
-            nodejs.enable = true;
+            nodejs.enable = false;
           };
         };
       }
