@@ -27,6 +27,17 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
 )
 ThisBuild / githubWorkflowPermissions := Some(Permissions.Specify.defaultRestrictive)
 
+// We can't set permissions on the clean workflow, but we can set a
+// reasonable number of retention days and get rid of it entirely!
+ThisBuild / githubWorkflowIncludeClean := false
+ThisBuild / githubWorkflowGeneratedUploadSteps ~= { workflows =>
+  workflows.map {
+    case job: WorkflowStep.Use if job.name.contains("Upload target directories") =>
+      job.updatedParams("retention-days", "2").withCond(None)
+    case job => job
+  }
+}
+
 // semantic db settings
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbIncludeInJar := true
