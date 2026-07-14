@@ -1,3 +1,4 @@
+import org.typelevel.sbt.gha.PermissionValue
 import org.typelevel.sbt.gha.Permissions
 
 // https://typelevel.org/sbt-typelevel/faq.html#what-is-a-base-version-anyway
@@ -25,7 +26,9 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("11"), // the first java is the default java, don't change the order
   JavaSpec.temurin("8")
 )
-ThisBuild / githubWorkflowPermissions := Some(Permissions.Specify.defaultRestrictive)
+ThisBuild / githubWorkflowPermissions := Some(
+  Permissions.Specify.defaultRestrictive.withContents(PermissionValue.Write)
+)
 
 // We can't set permissions on the clean workflow, but we can set a
 // reasonable number of retention days and get rid of it entirely!
