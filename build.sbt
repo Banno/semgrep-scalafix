@@ -1,3 +1,5 @@
+import org.typelevel.sbt.gha.Permissions
+
 // https://typelevel.org/sbt-typelevel/faq.html#what-is-a-base-version-anyway
 ThisBuild / tlBaseVersion := "0.4" // your current series x.y
 
@@ -23,6 +25,7 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("11"), // the first java is the default java, don't change the order
   JavaSpec.temurin("8")
 )
+ThisBuild / githubWorkflowPermissions := Some(Permissions.Specify.defaultRestrictive)
 
 // semantic db settings
 ThisBuild / semanticdbEnabled := true
