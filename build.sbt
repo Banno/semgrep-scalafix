@@ -1,3 +1,6 @@
+import org.typelevel.sbt.gha.PermissionValue
+import org.typelevel.sbt.gha.Permissions
+
 // https://typelevel.org/sbt-typelevel/faq.html#what-is-a-base-version-anyway
 ThisBuild / tlBaseVersion := "0.4" // your current series x.y
 
@@ -23,6 +26,20 @@ ThisBuild / githubWorkflowJavaVersions := Seq(
   JavaSpec.temurin("11"), // the first java is the default java, don't change the order
   JavaSpec.temurin("8")
 )
+ThisBuild / githubWorkflowPermissions := Some(
+  Permissions.Specify.defaultRestrictive.withContents(PermissionValue.Write)
+)
+
+// We can't set permissions on the clean workflow, but we can set a
+// reasonable number of retention days and get rid of it entirely!
+ThisBuild / githubWorkflowIncludeClean := false
+ThisBuild / githubWorkflowGeneratedUploadSteps ~= { workflows =>
+  workflows.map {
+    case job: WorkflowStep.Use if job.name.contains("Upload target directories") =>
+      job.updatedParams("retention-days", "2").withCond(None)
+    case job => job
+  }
+}
 
 // semantic db settings
 ThisBuild / semanticdbEnabled := true
