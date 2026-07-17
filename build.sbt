@@ -54,14 +54,16 @@ lazy val root = project
 lazy val docs = project
   .in(file("site"))
   .enablePlugins(TypelevelSitePlugin)
-  .settings(tlSiteHelium ~= {
-    import laika.helium.config._
-    import laika.ast.Path.Root
-    _.site
-      .topNavigationBar(
-        homeLink = IconLink.internal(Root / "index.md", HeliumIcon.home)
-      )
-  })
+  .settings(
+    tlSiteHelium ~= {
+      import laika.helium.config._
+      import laika.ast.Path.Root
+      _.site
+        .topNavigationBar(
+          homeLink = IconLink.internal(Root / "index.md", HeliumIcon.home)
+        )
+    }
+  )
 
 lazy val scalafixRules = project
   .in(file("rules"))
