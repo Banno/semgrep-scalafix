@@ -17,6 +17,16 @@ object NoRsaWithoutPadding {
   Using RSA without OAE padding may weaken encryption. Use `OAEPWithMD5AndMGF1Padding` instead.
    */
 
+  Cipher.getInstance("rsa/ecb/nopadding") /* assert: NoRsaWithoutPadding.noRsaWithoutPadding
+                     ^^^^^^^^^^^^^^^^^^^
+  Using RSA without OAE padding may weaken encryption. Use `OAEPWithMD5AndMGF1Padding` instead.
+   */
+
+  Cipher.getInstance("RSA") /* assert: NoRsaWithoutPadding.noRsaWithoutPadding
+                     ^^^^^
+  Using RSA without OAE padding may weaken encryption. Use `OAEPWithMD5AndMGF1Padding` instead.
+   */
+
   Cipher.getInstance("RSA/ECB/PKCS1Padding")
 
 }
