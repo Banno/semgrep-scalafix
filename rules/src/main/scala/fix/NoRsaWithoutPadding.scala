@@ -37,7 +37,7 @@ class NoRsaWithoutPadding extends SemanticRule("NoRsaWithoutPadding") {
 
 final case class NoRsaWithoutPaddingDiagnostic(t: Tree) extends Diagnostic {
   override def message: String =
-    "Using RSA without OAE padding may weaken encryption. Use `OAEPWithMD5AndMGF1Padding` instead."
+    "Using RSA without OAE padding may weaken encryption. Use `OAEPWithSHA-256AndMGF1Padding` instead."
 
   override def position: Position = t.pos
 
