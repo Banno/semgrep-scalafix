@@ -42,7 +42,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        scala: [2.13, 2.12]
+        scala: [3, 2.12]
         java: [temurin@11, temurin@8]
         exclude:
           - scala: 2.12
@@ -165,12 +165,12 @@ jobs:
         if: matrix.java == 'temurin@8' && steps.setup-java-temurin-8.outputs.cache-hit == 'false'
         run: sbt +update
 
-      - name: Download target directories (2.13)
+      - name: Download target directories (3)
         uses: actions/download-artifact@v6
         with:
-          name: target-${{ matrix.os }}-${{ matrix.java }}-2.13
+          name: target-${{ matrix.os }}-${{ matrix.java }}-3
 
-      - name: Inflate target directories (2.13)
+      - name: Inflate target directories (3)
         run: |
           tar xf targets.tar
           rm targets.tar
@@ -255,7 +255,7 @@ jobs:
       - name: Submit Dependencies
         uses: scalacenter/sbt-dependency-submission@v2
         with:
-          modules-ignore: root_2.13 root_2.12 docs_2.13 docs_2.12 scalafixoutput_2.13 scalafixoutput_2.12 scalafixtests_2.13 scalafixtests_2.12 scalafixinput_2.13 scalafixinput_2.12
+          modules-ignore: root_3 root_2.12 docs_3 docs_2.12 scalafixoutput_3 scalafixoutput_2.12 scalafixtests_3 scalafixtests_2.12 scalafixinput_3 scalafixinput_2.12
           configs-ignore: test scala-tool scala-doc-tool test-internal
 
   site:
