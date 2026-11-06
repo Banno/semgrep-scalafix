@@ -10,3 +10,8 @@ To use the latest version, include the following in your `build.sbt`:
 ThisBuild / scalafixDependencies += 
   "com.banno" %% "semgrep-scalafix" % "0.1.0"
 ```
+
+## Actions pins
+
+The GitHub actions managed by sbt-typelevel must be declared in
+[github-pins.json](./project/src/main/resources/github-pins.json).
