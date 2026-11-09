@@ -1,0 +1,10 @@
+{
+  "sbt/setup-sbt": { "version": "v1.5.14", "sha": "67d461eba2c4753196c230e02da850757ba4775e" },
+  "scalacenter/sbt-dependency-submission": { "version": "v3.2.3", "sha": "d84eef4c09e633bcf5f113bcad7fd5e9af1baee9" },
+  "actions/checkout": { "version": "v7.0.1", "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1" },
+  "actions/setup-java": { "version": "v6.1.0", "sha": "b843ebf9b913146b38da2eaa7aeddf76074ae1ad" },
+  "actions/cache": { "version": "v6.1.0", "sha": "55cc8345863c7cc4c66a329aec7e433d2d1c52a9" },
+  "actions/upload-artifact": { "version": "v7.0.2", "sha": "cf430e030ddbb5b0abf93d22962f4752f3646cd9" },
+  "actions/download-artifact": { "version": "v8.0.2", "sha": "9000827ccba6bdab643e8b6fd33ac0654aef8333" },
+  "peaceiris/actions-gh-pages": { "version": "v4", "sha": "84c30a85c19949d7eee79c4ff27748b70285e453" }
+}
